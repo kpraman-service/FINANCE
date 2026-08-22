@@ -6,10 +6,18 @@ import { Card } from '../../../components/ui/Card';
 import { Badge } from '../../../components/ui/Badge';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
-import { Search, UserCheck, UserX, Trash2 } from 'lucide-react';
+import { UserCheck, UserX, Trash2 } from 'lucide-react';
+
+interface UserItem {
+  id: number;
+  username: string;
+  email: string;
+  is_active: boolean;
+  roles: string[];
+}
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<UserItem[]>([]);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -20,12 +28,12 @@ export default function AdminUsersPage() {
     try {
       const res = await api.get('/admin/users');
       setUsers(res.data.users || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
 
-  const handleToggleStatus = async (user: any) => {
+  const handleToggleStatus = async (user: UserItem) => {
     const newStatus = !user.is_active;
     const actionText = newStatus ? 'activate' : 'deactivate';
     if (!confirm(`Are you sure you want to ${actionText} user ${user.username}?`)) return;
@@ -33,7 +41,7 @@ export default function AdminUsersPage() {
     try {
       await api.put(`/admin/users/${user.id}/status`, { is_active: newStatus, reason: `Admin ${actionText}` });
       fetchUsers();
-    } catch (err) {
+    } catch {
       alert('Failed to update user status');
     }
   };
@@ -43,7 +51,7 @@ export default function AdminUsersPage() {
     try {
       await api.delete(`/admin/users/${id}`);
       fetchUsers();
-    } catch (err) {
+    } catch {
       alert('Failed to delete user');
     }
   };

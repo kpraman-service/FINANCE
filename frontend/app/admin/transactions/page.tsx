@@ -6,9 +6,18 @@ import { Card } from '../../../components/ui/Card';
 import { Badge } from '../../../components/ui/Badge';
 import { ShieldAlert } from 'lucide-react';
 
+interface TransactionItem {
+  id: number;
+  user_id: number;
+  description: string;
+  type: 'income' | 'expense' | 'transfer';
+  date: string;
+  amount: number | string;
+}
+
 export default function AdminTransactionsPage() {
-  const [transactions, setTransactions] = useState<any[]>([]);
-  const [suspicious, setSuspicious] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<TransactionItem[]>([]);
+  const [suspicious, setSuspicious] = useState<TransactionItem[]>([]);
 
   useEffect(() => {
     fetchAdminTx();
@@ -22,7 +31,7 @@ export default function AdminTransactionsPage() {
       ]);
       setTransactions(txRes.data.items || []);
       setSuspicious(suspRes.data.items || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -73,7 +82,7 @@ export default function AdminTransactionsPage() {
                   </td>
                   <td className="py-3 text-slate-400">{new Date(tx.date).toLocaleDateString()}</td>
                   <td className="py-3 text-right font-bold text-slate-100">
-                    ₹{parseFloat(tx.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                    ₹{floatVal(tx.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </td>
                 </tr>
               ))}
@@ -83,4 +92,8 @@ export default function AdminTransactionsPage() {
       </Card>
     </div>
   );
+}
+
+function floatVal(val: number | string): number {
+  return typeof val === 'number' ? val : parseFloat(val || '0');
 }

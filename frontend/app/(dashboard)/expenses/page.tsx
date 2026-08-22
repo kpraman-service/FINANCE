@@ -6,11 +6,27 @@ import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { Modal } from '../../../components/ui/Modal';
-import { Plus, Trash2, Calendar, CreditCard } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
+
+interface CategoryItem {
+  id: number;
+  name: string;
+  type: string;
+  icon?: string;
+}
+
+interface ExpenseItem {
+  id: number;
+  amount: number | string;
+  description?: string;
+  payment_method?: string;
+  date: string;
+  category?: CategoryItem;
+}
 
 export default function ExpensesPage() {
-  const [expenses, setExpenses] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     amount: '',
@@ -29,7 +45,7 @@ export default function ExpensesPage() {
     try {
       const res = await api.get('/expenses?limit=50');
       setExpenses(res.data.items || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -37,8 +53,8 @@ export default function ExpensesPage() {
   const fetchCategories = async () => {
     try {
       const res = await api.get('/admin/categories');
-      setCategories((res.data || []).filter((c: any) => c.type === 'expense'));
-    } catch (err) {
+      setCategories((res.data || []).filter((c: CategoryItem) => c.type === 'expense'));
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -56,7 +72,7 @@ export default function ExpensesPage() {
       setIsModalOpen(false);
       setFormData({ amount: '', category_id: '', description: '', payment_method: 'UPI', date: new Date().toISOString().split('T')[0] });
       fetchExpenses();
-    } catch (err) {
+    } catch {
       alert('Failed to log expense');
     }
   };
@@ -66,7 +82,7 @@ export default function ExpensesPage() {
     try {
       await api.delete(`/expenses/${id}`);
       fetchExpenses();
-    } catch (err) {
+    } catch {
       alert('Failed to delete expense');
     }
   };
@@ -108,7 +124,7 @@ export default function ExpensesPage() {
                   <td className="py-3 text-slate-400">{exp.payment_method || 'Cash'}</td>
                   <td className="py-3 text-slate-400">{new Date(exp.date).toLocaleDateString()}</td>
                   <td className="py-3 text-right font-bold text-red-400">
-                    -₹{parseFloat(exp.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                    -₹{floatVal(exp.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </td>
                   <td className="py-3 text-right">
                     <button onClick={() => handleDelete(exp.id)} className="p-1 text-slate-500 hover:text-red-400">
@@ -194,4 +210,8 @@ export default function ExpensesPage() {
       </Modal>
     </div>
   );
+}
+
+function floatVal(val: number | string): number {
+  return typeof val === 'number' ? val : parseFloat(val || '0');
 }

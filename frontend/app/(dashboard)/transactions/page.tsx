@@ -3,14 +3,21 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../../../services/api';
 import { Card } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { Badge } from '../../../components/ui/Badge';
 import { Search, Filter, Calendar, Trash2 } from 'lucide-react';
 
+interface TransactionItem {
+  id: number;
+  description: string;
+  type: 'income' | 'expense' | 'transfer';
+  payment_method?: string;
+  date: string;
+  amount: number | string;
+}
+
 export default function TransactionsPage() {
-  const [transactions, setTransactions] = useState<any[]>([]);
-  const [total, setTotal] = useState(0);
+  const [transactions, setTransactions] = useState<TransactionItem[]>([]);
   const [typeFilter, setTypeFilter] = useState('');
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -26,8 +33,7 @@ export default function TransactionsPage() {
       if (typeFilter) url += `&type=${typeFilter}`;
       const res = await api.get(url);
       setTransactions(res.data.items || []);
-      setTotal(res.data.total || 0);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     } finally {
       setLoading(false);
@@ -39,7 +45,7 @@ export default function TransactionsPage() {
     try {
       await api.delete(`/transactions/${id}`);
       fetchTransactions();
-    } catch (err) {
+    } catch {
       alert('Failed to delete transaction');
     }
   };
@@ -116,7 +122,7 @@ export default function TransactionsPage() {
                     </div>
                   </td>
                   <td className={`py-3 text-right font-bold ${tx.type === 'income' ? 'text-emerald-400' : 'text-slate-200'}`}>
-                    {tx.type === 'income' ? '+' : '-'}₹{parseFloat(tx.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                    {tx.type === 'income' ? '+' : '-'}₹{floatVal(tx.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </td>
                   <td className="py-3 text-right">
                     <button
@@ -142,4 +148,8 @@ export default function TransactionsPage() {
       </Card>
     </div>
   );
+}
+
+function floatVal(val: number | string): number {
+  return typeof val === 'number' ? val : parseFloat(val || '0');
 }

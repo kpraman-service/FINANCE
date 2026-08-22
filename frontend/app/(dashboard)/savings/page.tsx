@@ -9,11 +9,31 @@ import { Badge } from '../../../components/ui/Badge';
 import { Modal } from '../../../components/ui/Modal';
 import { Target, Plus, ArrowUpRight, ArrowDownLeft, Trash2 } from 'lucide-react';
 
+interface SavingsGoalItem {
+  id: number;
+  user_id: number;
+  title: string;
+  target_amount: number;
+  current_amount: number;
+  target_date: string;
+  status: 'active' | 'completed' | 'abandoned';
+  percentage_completed: number;
+  days_remaining: number;
+}
+
+interface ApiError {
+  response?: {
+    data?: {
+      detail?: string;
+    };
+  };
+}
+
 export default function SavingsPage() {
-  const [goals, setGoals] = useState<any[]>([]);
+  const [goals, setGoals] = useState<SavingsGoalItem[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isTxModalOpen, setIsTxModalOpen] = useState(false);
-  const [selectedGoal, setSelectedGoal] = useState<any>(null);
+  const [selectedGoal, setSelectedGoal] = useState<SavingsGoalItem | null>(null);
   const [txType, setTxType] = useState<'add' | 'withdraw'>('add');
   const [amount, setAmount] = useState('');
 
@@ -31,7 +51,7 @@ export default function SavingsPage() {
     try {
       const res = await api.get('/savings');
       setGoals(res.data || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -47,7 +67,7 @@ export default function SavingsPage() {
       setIsCreateModalOpen(false);
       setNewGoal({ title: '', target_amount: '', target_date: new Date().toISOString().split('T')[0] });
       fetchGoals();
-    } catch (err) {
+    } catch {
       alert('Failed to create savings goal');
     }
   };
@@ -61,8 +81,9 @@ export default function SavingsPage() {
       setIsTxModalOpen(false);
       setAmount('');
       fetchGoals();
-    } catch (err: any) {
-      alert(err.response?.data?.detail || 'Transaction failed');
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      alert(apiErr.response?.data?.detail || 'Transaction failed');
     }
   };
 
@@ -71,7 +92,7 @@ export default function SavingsPage() {
     try {
       await api.delete(`/savings/${id}`);
       fetchGoals();
-    } catch (err) {
+    } catch {
       alert('Failed to delete goal');
     }
   };

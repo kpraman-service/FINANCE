@@ -28,11 +28,45 @@ import {
   Cell
 } from 'recharts';
 
+interface SummaryData {
+  total_income: number;
+  total_expenses: number;
+  total_savings: number;
+  savings_rate: number;
+  average_daily_spending: number;
+  top_income_source?: string;
+  financial_health?: 'Excellent' | 'Good' | 'Average' | 'Poor';
+}
+
+interface MonthlyItem {
+  month: string;
+  income: number;
+  expenses: number;
+  savings: number;
+  savings_rate: number;
+}
+
+interface CategoryItem {
+  name: string;
+  icon?: string;
+  amount: number;
+  percentage: number;
+}
+
+interface TransactionItem {
+  id: number;
+  description: string;
+  type: 'income' | 'expense' | 'transfer';
+  payment_method?: string;
+  date: string;
+  amount: number | string;
+}
+
 export default function DashboardPage() {
-  const [summary, setSummary] = useState<any>(null);
-  const [monthly, setMonthly] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [summary, setSummary] = useState<SummaryData | null>(null);
+  const [monthly, setMonthly] = useState<MonthlyItem[]>([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [transactions, setTransactions] = useState<TransactionItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,7 +87,7 @@ export default function DashboardPage() {
       setMonthly(monthRes.data.months || []);
       setCategories(catRes.data.categories || []);
       setTransactions(txRes.data.items || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error fetching dashboard data:', err);
     } finally {
       setLoading(false);
@@ -205,7 +239,7 @@ export default function DashboardPage() {
                     paddingAngle={4}
                     dataKey="amount"
                   >
-                    {categories.map((entry, index) => (
+                    {categories.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
@@ -280,6 +314,6 @@ export default function DashboardPage() {
   );
 }
 
-function floatVal(val: any): number {
-  return typeof val === 'number' ? val : parseFloat(val || 0);
+function floatVal(val: number | string): number {
+  return typeof val === 'number' ? val : parseFloat(val || '0');
 }

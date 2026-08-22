@@ -3,10 +3,18 @@
 import React, { useEffect, useState } from 'react';
 import { api } from '../../../services/api';
 import { Card } from '../../../components/ui/Card';
-import { History } from 'lucide-react';
+
+interface AuditLogItem {
+  id: number;
+  admin_id?: number;
+  action: string;
+  resource?: string;
+  description?: string;
+  created_at: string;
+}
 
 export default function AdminAuditLogsPage() {
-  const [logs, setLogs] = useState<any[]>([]);
+  const [logs, setLogs] = useState<AuditLogItem[]>([]);
 
   useEffect(() => {
     fetchLogs();
@@ -16,7 +24,7 @@ export default function AdminAuditLogsPage() {
     try {
       const res = await api.get('/admin/audit-logs');
       setLogs(res.data.logs || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };

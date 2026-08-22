@@ -7,11 +7,49 @@ import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { Badge } from '../../../components/ui/Badge';
 import { Modal } from '../../../components/ui/Modal';
-import { PieChart, Plus, AlertCircle, CheckCircle } from 'lucide-react';
+import { PieChart, Plus } from 'lucide-react';
+
+interface CategoryItem {
+  id: number;
+  name: string;
+  type: string;
+  icon?: string;
+}
+
+interface BudgetCategoryDetail {
+  id: number;
+  category_id: number;
+  allocated_amount: number;
+  used_amount: number;
+  remaining_amount: number;
+  percentage_used: number;
+  category?: CategoryItem;
+}
+
+interface BudgetDetails {
+  id: number;
+  user_id: number;
+  month: number;
+  year: number;
+  total_amount: number;
+  total_used: number;
+  total_remaining: number;
+  percentage_used: number;
+  status: 'On Track' | 'Caution' | 'Over Budget';
+  categories: BudgetCategoryDetail[];
+}
+
+interface ApiError {
+  response?: {
+    data?: {
+      detail?: string;
+    };
+  };
+}
 
 export default function BudgetPage() {
-  const [budgetDetails, setBudgetDetails] = useState<any>(null);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [budgetDetails, setBudgetDetails] = useState<BudgetDetails | null>(null);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [totalAmount, setTotalAmount] = useState('45000');
   const [allocations, setAllocations] = useState<{ [key: number]: string }>({});
@@ -25,7 +63,7 @@ export default function BudgetPage() {
     try {
       const res = await api.get('/budgets');
       setBudgetDetails(res.data);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -33,9 +71,9 @@ export default function BudgetPage() {
   const fetchCategories = async () => {
     try {
       const res = await api.get('/admin/categories');
-      const expenseCats = (res.data || []).filter((c: any) => c.type === 'expense');
+      const expenseCats = (res.data || []).filter((c: CategoryItem) => c.type === 'expense');
       setCategories(expenseCats);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -63,8 +101,9 @@ export default function BudgetPage() {
       });
       setIsModalOpen(false);
       fetchBudget();
-    } catch (err: any) {
-      alert(err.response?.data?.detail || 'Failed to save budget');
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      alert(apiErr.response?.data?.detail || 'Failed to save budget');
     }
   };
 
@@ -123,7 +162,7 @@ export default function BudgetPage() {
           {/* Category Progress Bars */}
           <Card title="Category Allocations & Real-Time Spending">
             <div className="space-y-6 pt-2">
-              {budgetDetails.categories.map((cat: any) => (
+              {budgetDetails.categories.map((cat) => (
                 <div key={cat.id} className="space-y-2">
                   <div className="flex justify-between items-center text-xs">
                     <span className="font-semibold text-slate-200">

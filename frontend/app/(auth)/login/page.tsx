@@ -6,6 +6,14 @@ import { authService } from '../../../services/auth.service';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 
+interface ApiError {
+  response?: {
+    data?: {
+      detail?: string;
+    };
+  };
+}
+
 export default function LoginPage() {
   const [email, setEmail] = useState('user@example.com');
   const [password, setPassword] = useState('Password123!');
@@ -20,8 +28,9 @@ export default function LoginPage() {
     try {
       await authService.login({ email, password });
       window.location.href = '/';
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to sign in');
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      setError(apiErr.response?.data?.detail || 'Failed to sign in');
     } finally {
       setIsLoading(false);
     }

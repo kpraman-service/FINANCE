@@ -5,8 +5,15 @@ import { api } from '../../../services/api';
 import { Card } from '../../../components/ui/Card';
 import { Bell } from 'lucide-react';
 
+interface NotificationItem {
+  id: number;
+  type: string;
+  message: string;
+  created_at: string;
+}
+
 export default function AdminNotificationsPage() {
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
   useEffect(() => {
     fetchNotifications();
@@ -16,7 +23,7 @@ export default function AdminNotificationsPage() {
     try {
       const res = await api.get('/admin/notifications');
       setNotifications(res.data.items || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };

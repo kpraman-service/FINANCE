@@ -8,8 +8,15 @@ import { Input } from '../../../components/ui/Input';
 import { Modal } from '../../../components/ui/Modal';
 import { Plus, Trash2 } from 'lucide-react';
 
+interface CategoryItem {
+  id: number;
+  name: string;
+  type: string;
+  icon?: string;
+}
+
 export default function AdminCategoriesPage() {
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState('');
   const [type, setType] = useState('expense');
@@ -23,7 +30,7 @@ export default function AdminCategoriesPage() {
     try {
       const res = await api.get('/admin/categories');
       setCategories(res.data || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -35,7 +42,7 @@ export default function AdminCategoriesPage() {
       setIsModalOpen(false);
       setName('');
       fetchCategories();
-    } catch (err) {
+    } catch {
       alert('Failed to add category');
     }
   };
@@ -45,7 +52,7 @@ export default function AdminCategoriesPage() {
     try {
       await api.delete(`/admin/categories/${id}`);
       fetchCategories();
-    } catch (err) {
+    } catch {
       alert('Failed to delete category');
     }
   };

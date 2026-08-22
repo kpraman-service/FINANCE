@@ -6,10 +6,18 @@ import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 import { Modal } from '../../../components/ui/Modal';
-import { Plus, Trash2, Calendar, TrendingUp } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
+
+interface IncomeItem {
+  id: number;
+  amount: number | string;
+  source: string;
+  description?: string;
+  date: string;
+}
 
 export default function IncomePage() {
-  const [incomes, setIncomes] = useState<any[]>([]);
+  const [incomes, setIncomes] = useState<IncomeItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     amount: '',
@@ -26,7 +34,7 @@ export default function IncomePage() {
     try {
       const res = await api.get('/income?limit=50');
       setIncomes(res.data.items || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -43,7 +51,7 @@ export default function IncomePage() {
       setIsModalOpen(false);
       setFormData({ amount: '', source: 'Salary', description: '', date: new Date().toISOString().split('T')[0] });
       fetchIncome();
-    } catch (err) {
+    } catch {
       alert('Failed to log income');
     }
   };
@@ -53,7 +61,7 @@ export default function IncomePage() {
     try {
       await api.delete(`/income/${id}`);
       fetchIncome();
-    } catch (err) {
+    } catch {
       alert('Failed to delete income record');
     }
   };
@@ -91,7 +99,7 @@ export default function IncomePage() {
                   <td className="py-3 text-slate-200">{inc.description || 'N/A'}</td>
                   <td className="py-3 text-slate-400">{new Date(inc.date).toLocaleDateString()}</td>
                   <td className="py-3 text-right font-bold text-emerald-400">
-                    +₹{parseFloat(inc.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                    +₹{floatVal(inc.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </td>
                   <td className="py-3 text-right">
                     <button onClick={() => handleDelete(inc.id)} className="p-1 text-slate-500 hover:text-red-400">
@@ -160,4 +168,8 @@ export default function IncomePage() {
       </Modal>
     </div>
   );
+}
+
+function floatVal(val: number | string): number {
+  return typeof val === 'number' ? val : parseFloat(val || '0');
 }

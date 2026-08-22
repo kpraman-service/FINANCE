@@ -3,14 +3,25 @@
 import React, { useState } from 'react';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
-import { Download, FileText, Calendar } from 'lucide-react';
+import { Download, FileText } from 'lucide-react';
 import { api } from '../../../services/api';
+
+interface ReportSummary {
+  total_income: number;
+  total_expenses: number;
+  total_savings: number;
+}
+
+interface ReportData {
+  report_period: string;
+  summary?: ReportSummary;
+}
 
 export default function ReportsPage() {
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth() + 1);
   const [year, setYear] = useState(now.getFullYear());
-  const [reportData, setReportData] = useState<any>(null);
+  const [reportData, setReportData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchReport = async () => {
@@ -18,7 +29,7 @@ export default function ReportsPage() {
     try {
       const res = await api.get(`/reports/monthly?month=${month}&year=${year}&format=json`);
       setReportData(res.data);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     } finally {
       setLoading(false);
@@ -26,7 +37,6 @@ export default function ReportsPage() {
   };
 
   const handleExportCSV = () => {
-    const token = localStorage.getItem('access_token');
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     window.open(`${apiUrl}/api/reports/monthly?month=${month}&year=${year}&format=csv`, '_blank');
   };

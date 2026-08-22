@@ -6,6 +6,14 @@ import { authService } from '../../../services/auth.service';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
 
+interface ApiError {
+  response?: {
+    data?: {
+      detail?: string;
+    };
+  };
+}
+
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     username: '',
@@ -33,8 +41,9 @@ export default function RegisterPage() {
       await authService.register(formData);
       await authService.login({ email: formData.email, password: formData.password });
       window.location.href = '/';
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Registration failed');
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      setError(apiErr.response?.data?.detail || 'Registration failed');
     } finally {
       setIsLoading(false);
     }

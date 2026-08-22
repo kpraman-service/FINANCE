@@ -5,8 +5,25 @@ import { api } from '../../services/api';
 import { Card } from '../../components/ui/Card';
 import { Users, Receipt, ShieldAlert, Activity } from 'lucide-react';
 
+interface AdminStats {
+  user_statistics?: {
+    total_users: number;
+    active_users: number;
+    inactive_users: number;
+  };
+  financial_statistics?: {
+    total_platform_income: number;
+    total_platform_expenses: number;
+    total_volume: number;
+  };
+  platform_statistics?: {
+    total_transactions: number;
+    system_health: string;
+  };
+}
+
 export default function AdminDashboardPage() {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<AdminStats | null>(null);
 
   useEffect(() => {
     fetchStats();
@@ -16,7 +33,7 @@ export default function AdminDashboardPage() {
     try {
       const res = await api.get('/admin/statistics');
       setStats(res.data);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };

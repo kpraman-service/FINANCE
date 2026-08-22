@@ -13,15 +13,35 @@ import {
   Tooltip,
   BarChart,
   Bar,
-  PieChart,
-  Pie,
-  Cell
 } from 'recharts';
 
+interface SummaryData {
+  total_income: number;
+  total_expenses: number;
+  total_savings: number;
+  savings_rate: number;
+  financial_health?: 'Excellent' | 'Good' | 'Average' | 'Poor';
+}
+
+interface MonthlyItem {
+  month: string;
+  income: number;
+  expenses: number;
+  savings: number;
+  savings_rate: number;
+}
+
+interface CategoryItem {
+  name: string;
+  icon?: string;
+  amount: number;
+  percentage: number;
+}
+
 export default function AnalyticsPage() {
-  const [summary, setSummary] = useState<any>(null);
-  const [monthly, setMonthly] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [summary, setSummary] = useState<SummaryData | null>(null);
+  const [monthly, setMonthly] = useState<MonthlyItem[]>([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
 
   useEffect(() => {
     fetchAnalytics();
@@ -37,12 +57,10 @@ export default function AnalyticsPage() {
       setSummary(sRes.data);
       setMonthly(mRes.data.months || []);
       setCategories(cRes.data.categories || []);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
-
-  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
 
   return (
     <div className="space-y-6">
@@ -111,7 +129,7 @@ export default function AnalyticsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60">
-              {categories.map((cat, idx) => (
+              {categories.map((cat) => (
                 <tr key={cat.name} className="hover:bg-slate-800/30 transition-colors">
                   <td className="py-3 font-semibold text-slate-200">
                     {cat.icon || '📁'} {cat.name}

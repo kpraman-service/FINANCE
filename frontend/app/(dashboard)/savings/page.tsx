@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, FormEvent } from 'react';
 import { api } from '../../../services/api';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
@@ -56,7 +56,7 @@ export default function SavingsPage() {
     }
   };
 
-  const handleCreateGoal = async (e: React.FormEvent) => {
+  const handleCreateGoal = async (e: FormEvent) => {
     e.preventDefault();
     try {
       await api.post('/savings', {
@@ -72,7 +72,7 @@ export default function SavingsPage() {
     }
   };
 
-  const handleTxSubmit = async (e: React.FormEvent) => {
+  const handleTxSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!selectedGoal) return;
     try {

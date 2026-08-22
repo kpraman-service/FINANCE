@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import { Card } from '../../components/ui/Card';
 import { Users, Receipt, ShieldAlert, Activity } from 'lucide-react';

@@ -1,59 +1,45 @@
-import React from 'react';
-import Link from 'next/link';
+'use client';
+
 import { useAuthStore } from '../../store/authStore';
-import { authService } from '../../services/auth.service';
-import { LogOut, User, Shield, Wallet } from 'lucide-react';
+import { LogOut, User, Shield } from 'lucide-react';
 
-export const Navbar: React.FC = () => {
-  const { user, isAdmin } = useAuthStore();
+export function Navbar() {
+  const { user, logout } = useAuthStore();
 
-  const handleLogout = async () => {
-    await authService.logout();
+  const handleLogout = () => {
+    logout();
     window.location.href = '/login';
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 px-6 py-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl text-blue-400">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-              <Wallet className="w-5 h-5" />
-            </div>
-            <span>FinManager</span>
-          </Link>
-        </div>
+    <header className="h-16 border-b border-slate-800 bg-slate-950/50 backdrop-blur-md sticky top-0 z-30 px-6 flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <h2 className="text-sm font-semibold text-slate-200">
+          Welcome, <span className="text-blue-400">{user?.first_name || user?.username || 'User'}</span>
+        </h2>
+      </div>
 
-        <div className="flex items-center gap-4">
-          {isAdmin && (
-            <Link
-              href="/admin"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition-colors"
-            >
-              <Shield className="w-4 h-4" />
-              <span>Admin Panel</span>
-            </Link>
-          )}
+      <div className="flex items-center gap-4">
+        {user?.roles?.includes('admin') && (
+          <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded-full">
+            <Shield className="w-3 h-3" />
+            <span>Admin</span>
+          </span>
+        )}
 
-          <div className="flex items-center gap-3 pl-4 border-l border-slate-800">
-            <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
-              <User className="w-4 h-4" />
-            </div>
-            <div className="hidden sm:block text-left">
-              <div className="text-xs font-semibold text-slate-200">{user?.first_name || user?.username || 'User'}</div>
-              <div className="text-[10px] text-slate-400">{user?.email}</div>
-            </div>
-
-            <button
-              onClick={handleLogout}
-              title="Logout"
-              className="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-800/80 rounded-lg transition-colors ml-2"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
+        <div className="flex items-center gap-2 border-l border-slate-800 pl-4">
+          <div className="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs">
+            {user?.first_name ? user.first_name[0] : <User className="w-4 h-4" />}
           </div>
+          <button
+            onClick={handleLogout}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors"
+            title="Sign Out"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </header>
   );
-};
+}

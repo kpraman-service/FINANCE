@@ -1,93 +1,72 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useAuthStore } from '../../../store/authStore';
-import { Card } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
-import { Input } from '../../../components/ui/Input';
-import { User, Bell, Lock, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
+import { useAuthStore } from '../../store/authStore';
+import { Card } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
+import { Input } from '../../components/ui/Input';
+import { User, Lock } from 'lucide-react';
 
 export default function SettingsPage() {
   const { user } = useAuthStore();
-  const [firstName, setFirstName] = useState(user?.first_name || '');
-  const [lastName, setLastName] = useState(user?.last_name || '');
-  const [saved, setSaved] = useState(false);
-
-  const handleSaveProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
-  };
+  const [profile, setProfile] = useState({
+    first_name: user?.first_name || '',
+    last_name: user?.last_name || '',
+    email: user?.email || '',
+  });
 
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
         <h1 className="text-2xl font-bold text-slate-100">Account Settings</h1>
-        <p className="text-xs text-slate-400 mt-1">Manage profile details, security preferences, and display settings</p>
+        <p className="text-xs text-slate-400 mt-1">Manage user credentials, profile information, and security preferences</p>
       </div>
 
-      <Card title="User Profile Details">
-        <form onSubmit={handleSaveProfile} className="space-y-4 pt-2">
-          {saved && (
-            <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs rounded-lg">
-              Profile details updated successfully!
+      <Card title="User Profile Details" subtitle="Update basic information displayed in reports and navbar">
+        <form className="space-y-4 pt-2" onSubmit={(e) => e.preventDefault()}>
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-lg">
+              {profile.first_name ? profile.first_name[0] : <User className="w-6 h-6" />}
             </div>
-          )}
+            <div>
+              <div className="text-sm font-semibold text-slate-200">{user?.username}</div>
+              <div className="text-xs text-slate-400">Roles: {(user?.roles || []).join(', ')}</div>
+            </div>
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={profile.first_name}
+              onChange={(e) => setProfile({ ...profile, first_name: e.target.value })}
             />
             <Input
               label="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              value={profile.last_name}
+              onChange={(e) => setProfile({ ...profile, last_name: e.target.value })}
             />
           </div>
 
           <Input
-            label="Username"
-            value={user?.username || ''}
-            disabled
-            helperText="Username cannot be altered"
-          />
-
-          <Input
             label="Email Address"
-            value={user?.email || ''}
-            disabled
-            helperText="Primary email tied to JWT authentication"
+            type="email"
+            value={profile.email}
+            onChange={(e) => setProfile({ ...profile, email: e.target.value })}
           />
 
-          <Button type="submit" className="mt-2">Update Profile</Button>
+          <Button type="button" size="sm">Save Profile Changes</Button>
         </form>
       </Card>
 
-      <Card title="Security & Authentication">
-        <div className="space-y-4 pt-2">
-          <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900 border border-slate-800">
-            <div className="flex items-center gap-3">
-              <Lock className="w-5 h-5 text-blue-400" />
-              <div>
-                <div className="text-xs font-semibold text-slate-200">Account Password</div>
-                <div className="text-[11px] text-slate-400">Encrypted with Bcrypt hash security</div>
-              </div>
-            </div>
-            <Button size="sm" variant="secondary">Change Password</Button>
-          </div>
-
-          <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900 border border-slate-800">
-            <div className="flex items-center gap-3">
-              <ShieldCheck className="w-5 h-5 text-emerald-400" />
-              <div>
-                <div className="text-xs font-semibold text-slate-200">Active Roles</div>
-                <div className="text-[11px] text-slate-400">Roles: {(user?.roles || ['User']).join(', ')}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <Card title="Security & Password" subtitle="Update account password">
+        <form className="space-y-4 pt-2" onSubmit={(e) => e.preventDefault()}>
+          <Input label="Current Password" type="password" placeholder="••••••••" />
+          <Input label="New Password" type="password" placeholder="••••••••" />
+          <Button type="button" variant="secondary" size="sm" className="gap-2">
+            <Lock className="w-3.5 h-3.5" />
+            <span>Update Security Key</span>
+          </Button>
+        </form>
       </Card>
     </div>
   );

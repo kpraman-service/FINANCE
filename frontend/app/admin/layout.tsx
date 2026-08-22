@@ -1,46 +1,14 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
-import { Navbar } from '../../components/layout/Navbar';
+import { ReactNode } from 'react';
 import { Sidebar } from '../../components/layout/Sidebar';
-import { authService } from '../../services/auth.service';
-import { useAuthStore } from '../../store/authStore';
+import { Navbar } from '../../components/layout/Navbar';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { isAdmin, setUser } = useAuthStore();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    authService.getCurrentUser()
-      .then((usr) => {
-        setUser(usr);
-        if (!usr.roles?.includes('Admin')) {
-          window.location.href = '/';
-        } else {
-          setLoading(false);
-        }
-      })
-      .catch(() => {
-        window.location.href = '/login';
-      });
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex justify-center items-center text-amber-400 font-semibold">
-        Verifying Admin Credentials...
-      </div>
-    );
-  }
-
+export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col">
-      <Navbar />
-      <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex-1 p-6 overflow-y-auto max-w-7xl">
-          {children}
-        </main>
+    <div className="flex min-h-screen bg-slate-950 text-slate-100">
+      <Sidebar />
+      <div className="flex-1 flex flex-col min-w-0">
+        <Navbar />
+        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
       </div>
     </div>
   );

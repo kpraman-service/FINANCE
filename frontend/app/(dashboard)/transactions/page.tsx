@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { api } from '../../../services/api';
-import { Card } from '../../../components/ui/Card';
-import { Input } from '../../../components/ui/Input';
-import { Badge } from '../../../components/ui/Badge';
+import { api } from '@/services/api';
+import { Card } from '@/components/ui/Card';
+import { Input } from '@/components/ui/Input';
+import { Badge } from '@/components/ui/Badge';
 import { Search, Filter, Calendar, Trash2 } from 'lucide-react';
 
 interface TransactionItem {

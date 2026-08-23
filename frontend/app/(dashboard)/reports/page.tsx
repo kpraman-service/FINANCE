@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Card } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
 import { Download, FileText } from 'lucide-react';
-import { api } from '../../../services/api';
+import { api } from '@/services/api';
 
 interface ReportSummary {
   total_income: number;

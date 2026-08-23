@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState, FormEvent } from 'react';
-import { api } from '../../../services/api';
-import { Card } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
-import { Input } from '../../../components/ui/Input';
-import { Modal } from '../../../components/ui/Modal';
+import { api } from '@/services/api';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Modal } from '@/components/ui/Modal';
 import { Plus, Trash2 } from 'lucide-react';
 
 interface CategoryItem {

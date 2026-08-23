@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuthStore } from '../../store/authStore';
-import { Card } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
+import { useAuthStore } from '@/store/authStore';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import { User, Lock } from 'lucide-react';
 
 export default function SettingsPage() {

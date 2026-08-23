@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '@/store/authStore';
 import { LogOut, User, Shield } from 'lucide-react';
 
 export function Navbar() {

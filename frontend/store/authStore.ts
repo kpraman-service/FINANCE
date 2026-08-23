@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 export interface User {
-  id: int;
+  id: number;
   email: string;
   username: string;
   first_name?: string;
@@ -24,7 +24,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user_data') || 'null') : null,
   token: typeof window !== 'undefined' ? localStorage.getItem('access_token') : null,
   isAuthenticated: typeof window !== 'undefined' ? !!localStorage.getItem('access_token') : false,
-  isAdmin: typeof window !== 'undefined' ? (JSON.parse(localStorage.getItem('user_data') || 'null')?.roles || []).includes('Admin') : false,
+  isAdmin: typeof window !== 'undefined' ? (JSON.parse(localStorage.getItem('user_data') || 'null')?.roles || []).some((r: string) => r.toLowerCase() === 'admin') : false,
   
   setUser: (user) => {
     if (typeof window !== 'undefined') {
@@ -36,7 +36,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
     set({
       user,
-      isAdmin: user?.roles?.includes('Admin') || false
+      isAdmin: user?.roles?.some((r: string) => r.toLowerCase() === 'admin') || false
     });
   },
   

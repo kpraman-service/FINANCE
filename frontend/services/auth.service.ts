@@ -1,5 +1,5 @@
 import { api } from './api';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '@/store/authStore';
 
 export interface RegisterPayload {
   email: string;

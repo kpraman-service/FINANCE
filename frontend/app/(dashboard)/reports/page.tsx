@@ -37,8 +37,12 @@ export default function ReportsPage() {
   };
 
   const handleExportCSV = () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    window.open(`${apiUrl}/api/reports/monthly?month=${month}&year=${year}&format=csv`, '_blank');
+    // deno-lint-ignore no-node-globals
+    const apiUrl = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:8000';
+    // deno-lint-ignore no-window
+    if (typeof window !== 'undefined') {
+      window.open(`${apiUrl}/api/reports/monthly?month=${month}&year=${year}&format=csv`, '_blank');
+    }
   };
 
   return (

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"]
+  },
+  "lint": {
+    "exclude": [
+      "frontend/",
+      "backend/"
+    ],
+    "rules": {
+      "exclude": [
+        "no-node-globals",
+        "no-window",
+        "no-unused-vars"
+      ]
+    }
+  }
+}

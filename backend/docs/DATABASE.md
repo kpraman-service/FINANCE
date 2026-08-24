@@ -8,8 +8,8 @@ The Finance Management System uses **MongoDB** as its primary NoSQL document dat
 
 ## MongoDB Schema & Setup Scripts
 
-- **MongoDB Schema & Seed Script**: [`database/schema.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/database/schema.mongodb.js)
-- **MongoDB Playground**: [`playground-1.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/playground-1.mongodb.js)
+- **MongoDB Schema & Seed Script**: [`backend/database/schema.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/backend/database/schema.mongodb.js)
+- **MongoDB Playground**: [`backend/database/playground-1.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/backend/database/playground-1.mongodb.js)
 
 ---
 
@@ -34,9 +34,9 @@ The Finance Management System uses **MongoDB** as its primary NoSQL document dat
 
 ### 1. Via MongoDB Shell (`mongosh`)
 ```bash
-mongosh "mongodb://localhost:27017/finance_db" database/schema.mongodb.js
+mongosh "mongodb://localhost:27017/finance_db" backend/database/schema.mongodb.js
 ```
 
 ### 2. Via VS Code MongoDB Extension
-1. Open [`playground-1.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/playground-1.mongodb.js) or [`database/schema.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/database/schema.mongodb.js).
+1. Open [`backend/database/playground-1.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/backend/database/playground-1.mongodb.js) or [`backend/database/schema.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/backend/database/schema.mongodb.js).
 2. Click **Play / Run** in the top right corner of the VS Code editor panel.

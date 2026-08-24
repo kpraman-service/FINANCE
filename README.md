@@ -49,9 +49,9 @@ npm run dev
 ```
 
 ## Documentation
-- [API Documentation](docs/API.md)
-- [Database Schema](docs/DATABASE.md)
-- [Setup Guide](docs/SETUP.md)
+- [API Documentation](backend/docs/API.md)
+- [Database Schema](backend/docs/DATABASE.md)
+- [Setup Guide](backend/docs/SETUP.md)
 
 ## License
 MIT License

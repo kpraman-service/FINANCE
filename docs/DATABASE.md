@@ -1,22 +1,42 @@
-# Database Documentation
+# Database Documentation - MongoDB
 
-## Entity Relationship Overview
+## Overview
 
-The Finance Management System uses relational entities for users, security roles, transactions, categories, budgets, savings goals, notifications, and audit logging.
+The Finance Management System uses **MongoDB** as its primary NoSQL document database.
 
-## Core Tables
+---
 
-- **`users`**: Manages user authentication credentials, names, status, and login timestamps.
-- **`roles`**: Defines user authorization roles (`User`, `Admin`).
-- **`user_roles`**: Junction table mapping users to roles.
-- **`categories`**: Financial categories for expenses and income (e.g. Food, Salary, Transport).
-- **`payment_methods`**: Payment methods (Cash, UPI, Debit Card, Credit Card, Bank Transfer, Net Banking).
-- **`transactions`**: High-level ledger of all income, expense, and transfer transactions.
-- **`income`**: Detailed income entries linked to income sources.
-- **`expenses`**: Detailed expense entries linked to categories and payment methods.
-- **`budgets`**: Monthly budget targets created per user.
-- **`budget_categories`**: Specific category allocations within a monthly budget.
-- **`savings_goals`**: User savings goals with target amounts and dates.
-- **`savings_transactions`**: Ledger of deposits and withdrawals against savings goals.
-- **`notifications`**: User alert messages for budget warnings and account activity.
-- **`audit_logs`**: System audit trails recording all admin operations.
+## MongoDB Schema & Setup Scripts
+
+- **MongoDB Schema & Seed Script**: [`database/schema.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/database/schema.mongodb.js)
+- **MongoDB Playground**: [`playground-1.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/playground-1.mongodb.js)
+
+---
+
+## Collections Architecture
+
+| Collection Name | Description | Key Fields & Indexing |
+|---|---|---|
+| **`users`** | Authentication credentials & user details | `email` (Unique), `username` (Unique), `hashed_password`, `roles: ["User", "Admin"]`, `is_active` |
+| **`categories`** | Income & Expense categories | `name` (Unique), `type` ("expense"/"income"), `icon` |
+| **`payment_methods`** | Financial payment methods | `name` (Unique) |
+| **`transactions`** | Master transaction record | `user_id`, `category_id`, `type`, `amount`, `date` (Indexed) |
+| **`income`** | Income entries | `user_id`, `amount`, `source`, `description`, `date` |
+| **`expenses`** | Expense entries | `user_id`, `amount`, `category_id`, `category_name`, `payment_method`, `date` |
+| **`budgets`** | Monthly budget targets | `user_id`, `year`, `month` (Unique compound index), `categories: [{ category_id, allocated_amount }]` |
+| **`savings_goals`** | Financial savings goals | `user_id`, `title`, `target_amount`, `current_amount`, `transactions: [{ amount, type, date }]` |
+| **`notifications`** | User alerts & system notifications | `user_id`, `type`, `message`, `is_read` |
+| **`audit_logs`** | Admin system action audit log | `admin_id`, `action`, `resource`, `details`, `created_at` |
+
+---
+
+## How to Initialize and Run MongoDB
+
+### 1. Via MongoDB Shell (`mongosh`)
+```bash
+mongosh "mongodb://localhost:27017/finance_db" database/schema.mongodb.js
+```
+
+### 2. Via VS Code MongoDB Extension
+1. Open [`playground-1.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/playground-1.mongodb.js) or [`database/schema.mongodb.js`](file:///c:/Users/acer/Documents/FINANCE/database/schema.mongodb.js).
+2. Click **Play / Run** in the top right corner of the VS Code editor panel.

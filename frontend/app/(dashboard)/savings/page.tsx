@@ -67,8 +67,9 @@ export default function SavingsPage() {
       setIsCreateModalOpen(false);
       setNewGoal({ title: '', target_amount: '', target_date: new Date().toISOString().split('T')[0] });
       fetchGoals();
-    } catch {
-      alert('Failed to create savings goal');
+    } catch (err: unknown) {
+      const apiErr = err as ApiError;
+      alert(apiErr.response?.data?.detail || 'Failed to create savings goal');
     }
   };
 

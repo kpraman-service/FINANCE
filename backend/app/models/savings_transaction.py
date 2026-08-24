@@ -8,7 +8,7 @@ class SavingsTransaction(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     savings_goal_id = Column(Integer, ForeignKey("savings_goals.id", ondelete="CASCADE"), nullable=False, index=True)
-    amount = Column(Numeric(12, 2), nullable=False)
+    amount = Column(Numeric(18, 2), nullable=False)
     type = Column(String(20), nullable=False)  # 'deposit', 'withdrawal'
     date = Column(DateTime, default=datetime.utcnow)
     created_at = Column(DateTime, default=datetime.utcnow)

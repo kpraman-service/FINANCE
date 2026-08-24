@@ -8,7 +8,7 @@ class Expense(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    amount = Column(Numeric(12, 2), nullable=False)
+    amount = Column(Numeric(18, 2), nullable=False)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False, index=True)
     description = Column(String(255), nullable=True)
     payment_method = Column(String(50), nullable=True)

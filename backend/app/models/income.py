@@ -8,7 +8,7 @@ class Income(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    amount = Column(Numeric(12, 2), nullable=False)
+    amount = Column(Numeric(18, 2), nullable=False)
     source = Column(String(50), nullable=False)
     description = Column(String(255), nullable=True)
     date = Column(DateTime, nullable=False, index=True)

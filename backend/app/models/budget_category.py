@@ -8,7 +8,7 @@ class BudgetCategory(Base):
     id = Column(Integer, primary_key=True, index=True)
     budget_id = Column(Integer, ForeignKey("budgets.id", ondelete="CASCADE"), nullable=False)
     category_id = Column(Integer, ForeignKey("categories.id"), nullable=False)
-    allocated_amount = Column(Numeric(12, 2), nullable=False)
+    allocated_amount = Column(Numeric(18, 2), nullable=False)
 
     __table_args__ = (UniqueConstraint("budget_id", "category_id", name="uq_budget_category"),)
 

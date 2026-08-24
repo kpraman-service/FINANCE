@@ -10,7 +10,7 @@ class Budget(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     month = Column(Integer, nullable=False)
     year = Column(Integer, nullable=False)
-    total_amount = Column(Numeric(12, 2), nullable=False)
+    total_amount = Column(Numeric(18, 2), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

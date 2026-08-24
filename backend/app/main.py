@@ -13,7 +13,11 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("finance_app")
 
 # Initialize database tables
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+    logger.info("Database tables initialized successfully.")
+except Exception as err:
+    logger.error(f"Failed to initialize database tables: {err}")
 
 app = FastAPI(
     title="Finance Management System API",

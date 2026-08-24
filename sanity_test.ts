@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck: Deno test module run by Deno runtime in CI
 import { assertEquals, assertExists } from "https://deno.land/std@0.224.0/assert/mod.ts";
 
 Deno.test("Project Configuration Test - deno.json exists and is valid", () => {

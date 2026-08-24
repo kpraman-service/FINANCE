@@ -1,16 +1,16 @@
-import { ReactNode } from 'react';
+import { ReactNode, HTMLAttributes } from 'react';
 
-interface CardProps {
+export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   title?: string;
   subtitle?: string;
   action?: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
 }
 
-export function Card({ title, subtitle, action, children, className = '' }: CardProps) {
+export function Card({ title, subtitle, action, children, className = '', ...props }: CardProps) {
   return (
-    <div className={`glass-card p-5 rounded-xl ${className}`}>
+    <div className={`glass-card p-5 rounded-xl ${className}`} {...props}>
       {(title || action) && (
         <div className="flex items-center justify-between mb-4 border-b border-slate-800/80 pb-3">
           <div>

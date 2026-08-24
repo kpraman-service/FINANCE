@@ -143,7 +143,7 @@ const regularUserRes = db.users.insertOne({
 });
 
 // Admin User (Password: Admin123!)
-const adminUserRes = db.users.insertOne({
+db.users.insertOne({
   email: 'admin@example.com',
   username: 'admin_user',
   hashed_password: '$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW',

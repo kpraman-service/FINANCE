@@ -5,14 +5,9 @@
   "lint": {
     "exclude": [
       "frontend/",
-      "backend/"
-    ],
-    "rules": {
-      "exclude": [
-        "no-node-globals",
-        "no-window",
-        "no-unused-vars"
-      ]
-    }
+      "backend/",
+      "database/",
+      "playground-1.mongodb.js"
+    ]
   }
 }

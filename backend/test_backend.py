@@ -9,8 +9,19 @@ def test_health():
     assert res.json()["status"] == "ok"
     print("[PASSED] GET /health")
 
+def test_register():
+    res = client.post("/api/auth/register", json={
+        "email": "testuser@example.com",
+        "username": "testuser",
+        "password": "Password123!",
+        "password_confirm": "Password123!",
+        "first_name": "Test",
+        "last_name": "User"
+    })
+    print(f"[REGISTER] Status: {res.status_code}")
+
 def test_login():
-    res = client.post("/api/auth/login", json={"email": "user@example.com", "password": "Password123!"})
+    res = client.post("/api/auth/login", json={"email": "testuser@example.com", "password": "Password123!"})
     assert res.status_code == 200, f"Login failed: {res.text}"
     data = res.json()
     assert "access_token" in data
@@ -29,6 +40,7 @@ def test_authenticated_endpoints(token):
 
 if __name__ == "__main__":
     test_health()
+    test_register()
     token = test_login()
     test_authenticated_endpoints(token)
     print("\nALL BACKEND ENDPOINTS VERIFIED SUCCESSFULLY!")

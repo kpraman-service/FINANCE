@@ -34,7 +34,7 @@ services:
         fromService:
           type: web
           name: finance-backend
-          property: url
+          property: host
 
 databases:
   - name: finance-db

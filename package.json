@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "cd frontend && npm run dev",
-    "build": "cd frontend && npm install && npm run build",
-    "start": "cd frontend && npm run start",
-    "lint": "cd frontend && npm run lint"
+    "dev": "if [ -d \"frontend\" ]; then cd frontend && npm run dev; else next dev; fi",
+    "build": "if [ -d \"frontend\" ]; then cd frontend && npm install && npm run build; else next build; fi",
+    "start": "if [ -d \"frontend\" ]; then cd frontend && npm run start; else next start; fi",
+    "lint": "if [ -d \"frontend\" ]; then cd frontend && npm run lint; else next lint; fi"
   },
   "dependencies": {
     "axios": "^1.6.7",

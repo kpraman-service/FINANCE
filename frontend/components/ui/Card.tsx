@@ -1,4 +1,4 @@
-import React, { ReactNode, HTMLAttributes } from 'react';
+import { ReactNode, HTMLAttributes } from 'react';
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   title?: string;

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
 import { Modal } from '@/components/ui/Modal';
-import { PieChart, Plus } from 'lucide-react';
+import { BarChart3, Plus } from 'lucide-react';
 
 interface CategoryItem {
   id: number;
@@ -197,7 +197,7 @@ export default function BudgetPage() {
         </>
       ) : (
         <Card className="text-center py-12">
-          <PieChart className="w-12 h-12 text-slate-600 mx-auto mb-3" />
+          <BarChart3 className="w-12 h-12 text-slate-600 mx-auto mb-3" />
           <h3 className="text-base font-semibold text-slate-200">No Monthly Budget Configured</h3>
           <p className="text-xs text-slate-400 mt-1 mb-4 max-w-sm mx-auto">
             Setting up a budget allows you to allocate money into categories and track spending limits in real time.

@@ -27,7 +27,7 @@ export default function LoginPage() {
 
     try {
       await authService.login({ email, password });
-      window.location.href = '/';
+      globalThis.location.href = '/';
     } catch (err: unknown) {
       const apiErr = err as ApiError;
       setError(apiErr.response?.data?.detail || 'Failed to sign in');

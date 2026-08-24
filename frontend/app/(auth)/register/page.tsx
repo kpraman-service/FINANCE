@@ -40,7 +40,7 @@ export default function RegisterPage() {
     try {
       await authService.register(formData);
       await authService.login({ email: formData.email, password: formData.password });
-      window.location.href = '/';
+      globalThis.location.href = '/';
     } catch (err: unknown) {
       const apiErr = err as ApiError;
       setError(apiErr.response?.data?.detail || 'Registration failed');

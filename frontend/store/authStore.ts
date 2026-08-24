@@ -21,13 +21,13 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  user: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user_data') || 'null') : null,
-  token: typeof window !== 'undefined' ? localStorage.getItem('access_token') : null,
-  isAuthenticated: typeof window !== 'undefined' ? !!localStorage.getItem('access_token') : false,
-  isAdmin: typeof window !== 'undefined' ? (JSON.parse(localStorage.getItem('user_data') || 'null')?.roles || []).some((r: string) => r.toLowerCase() === 'admin') : false,
+  user: typeof globalThis.window !== 'undefined' ? JSON.parse(localStorage.getItem('user_data') || 'null') : null,
+  token: typeof globalThis.window !== 'undefined' ? localStorage.getItem('access_token') : null,
+  isAuthenticated: typeof globalThis.window !== 'undefined' ? !!localStorage.getItem('access_token') : false,
+  isAdmin: typeof globalThis.window !== 'undefined' ? (JSON.parse(localStorage.getItem('user_data') || 'null')?.roles || []).some((r: string) => r.toLowerCase() === 'admin') : false,
   
   setUser: (user) => {
-    if (typeof window !== 'undefined') {
+    if (typeof globalThis.window !== 'undefined') {
       if (user) {
         localStorage.setItem('user_data', JSON.stringify(user));
       } else {
@@ -41,7 +41,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
   
   setToken: (token) => {
-    if (typeof window !== 'undefined') {
+    if (typeof globalThis.window !== 'undefined') {
       if (token) {
         localStorage.setItem('access_token', token);
       } else {
@@ -55,7 +55,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
   
   logout: () => {
-    if (typeof window !== 'undefined') {
+    if (typeof globalThis.window !== 'undefined') {
       localStorage.removeItem('access_token');
       localStorage.removeItem('user_data');
     }

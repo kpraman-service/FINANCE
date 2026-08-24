@@ -2,7 +2,7 @@ import axios from 'axios';
 
 declare const process: { env?: { [key: string]: string | undefined } };
 
-let rawApiUrl = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:8000';
+let rawApiUrl = (typeof globalThis.process !== 'undefined' && globalThis.process.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:8000';
 if (rawApiUrl && !rawApiUrl.startsWith('http://') && !rawApiUrl.startsWith('https://')) {
   rawApiUrl = `https://${rawApiUrl}`;
 }
@@ -17,7 +17,7 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    if (typeof window !== 'undefined') {
+    if (typeof globalThis.window !== 'undefined') {
       const token = localStorage.getItem('access_token');
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -32,11 +32,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      if (typeof window !== 'undefined') {
+      if (typeof globalThis.window !== 'undefined') {
         localStorage.removeItem('access_token');
         localStorage.removeItem('user_data');
-        if (!window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/register')) {
-          window.location.href = '/login';
+        if (!globalThis.location.pathname.startsWith('/login') && !globalThis.location.pathname.startsWith('/register')) {
+          globalThis.location.href = '/login';
         }
       }
     }

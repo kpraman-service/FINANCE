@@ -37,11 +37,9 @@ export default function ReportsPage() {
   };
 
   const handleExportCSV = () => {
-    // deno-lint-ignore no-node-globals
-    const apiUrl = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:8000';
-    // deno-lint-ignore no-window
-    if (typeof window !== 'undefined') {
-      window.open(`${apiUrl}/api/reports/monthly?month=${month}&year=${year}&format=csv`, '_blank');
+    const apiUrl = (typeof globalThis.process !== 'undefined' && globalThis.process.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:8000';
+    if (typeof globalThis.window !== 'undefined') {
+      globalThis.open(`${apiUrl}/api/reports/monthly?month=${month}&year=${year}&format=csv`, '_blank');
     }
   };
 

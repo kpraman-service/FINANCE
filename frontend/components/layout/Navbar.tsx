@@ -8,7 +8,7 @@ export function Navbar() {
 
   const handleLogout = () => {
     logout();
-    window.location.href = '/login';
+    globalThis.location.href = '/login';
   };
 
   return (

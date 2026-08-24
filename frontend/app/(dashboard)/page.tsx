@@ -125,11 +125,11 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button onClick={() => window.location.href = '/income'} size="sm" variant="secondary" className="gap-1">
+          <Button onClick={() => globalThis.location.href = '/income'} size="sm" variant="secondary" className="gap-1">
             <Plus className="w-4 h-4 text-emerald-400" />
             <span>Add Income</span>
           </Button>
-          <Button onClick={() => window.location.href = '/expenses'} size="sm" className="gap-1">
+          <Button onClick={() => globalThis.location.href = '/expenses'} size="sm" className="gap-1">
             <Plus className="w-4 h-4" />
             <span>Add Expense</span>
           </Button>
@@ -262,7 +262,7 @@ export default function DashboardPage() {
         title="Recent Transactions Ledger"
         subtitle="Showing latest financial transactions across all payment methods"
         action={
-          <Button onClick={() => window.location.href = '/transactions'} size="sm" variant="ghost">
+          <Button onClick={() => globalThis.location.href = '/transactions'} size="sm" variant="ghost">
             View All &rarr;
           </Button>
         }

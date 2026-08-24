@@ -1,5 +1,7 @@
 import axios from 'axios';
-// deno-lint-ignore no-node-globals
+
+declare const process: { env?: { [key: string]: string | undefined } };
+
 let rawApiUrl = (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_API_URL) || 'http://localhost:8000';
 if (rawApiUrl && !rawApiUrl.startsWith('http://') && !rawApiUrl.startsWith('https://')) {
   rawApiUrl = `https://${rawApiUrl}`;
